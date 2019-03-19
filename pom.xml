@@ -10,8 +10,8 @@
 
 
     <modules>
+        <module>eureka-server-security</module>
         <module>eureka-server1</module>
-        <module>eureka-server2</module>
         <module>eureka-client1</module>
         <module>eureka-client2</module>
         <module>gateway</module>
