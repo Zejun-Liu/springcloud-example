@@ -1,0 +1,12 @@
+server:
+  port: 8091
+spring:
+  application:
+    name: EurekaClient1 #注册到eureka server 上的名字
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://user:password123@localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true  # 将自己的IP注册到eureka server，如果设置为false，则表示注册微服务所在的操作系统的hostname到eureka servers.

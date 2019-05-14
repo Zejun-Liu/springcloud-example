@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>springcloud-example</artifactId>
+        <groupId>com.jiuxian</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.jiuxian</groupId>
+    <artifactId>eureka-feign-hystrix</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>eureka-feign-hystrix-client-order1</module>
+        <module>eureka-feign-hystrix-client-order2</module>
+        <module>eureka-feign-hystrix-client-user</module>
+        <module>eureka-feign-hystrix-dashboard-client-user</module>
+        <module>eureka-feign-hystrix-server</module>
+    </modules>
+
+</project>

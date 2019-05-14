@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>springcloud-example</artifactId>
+        <groupId>com.jiuxian</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.jiuxian</groupId>
+    <artifactId>eureka-feign-auth</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>eureka-feign-auth-client-order1</module>
+        <module>eureka-feign-auth-client-order2</module>
+        <module>eureka-feign-auth-client-user</module>
+        <module>eureka-feign-auth-server</module>
+    </modules>
+
+</project>

@@ -1,0 +1,9 @@
+server:
+  port: 8091
+spring:
+  application:
+    name: eureka-client-user
+
+eureka-client-order:
+  ribbon:
+    listOfServers: localhost:8092,localhost:8093

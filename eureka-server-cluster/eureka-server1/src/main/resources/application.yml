@@ -1,0 +1,15 @@
+server:
+  port: 8761
+spring:
+  application:
+    name: EurekaServer1
+eureka:
+  instance:
+    hostname: peer1
+  client:
+    register-with-eureka: true  # 是否将自己注册到eurekaServer ，默认为true ，在单机时要改为false
+    fetch-registry: true # 是否从eureka Server 获取注册信息，单点server ，不需要同步的设为false。
+    service-url:
+      defaultZone: http://peer2:8762/eureka/  # 设置与Eureka Server 交互的地址，查询服务和注册都需要依赖这个地址；多个地址以,分割
+  server:
+    enable-self-preservation: true #是否开启自我保护，短时间丢失过多节点时，将不会删除注册表中的数据

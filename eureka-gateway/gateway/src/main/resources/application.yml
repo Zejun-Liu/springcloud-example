@@ -1,0 +1,161 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/,http://localhost:8762/eureka/
+  instance:
+    prefer-ip-address: true
+
+---
+server:
+  port: 8081
+spring:
+  profiles: dev1
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: header_route
+          uri: https://example.org
+          predicates:
+            - Header=X-Request-Id, \d+
+            - Host=**.somehost.org,**.anotherhost.org
+            - Method=GET
+            - Path=/foo/{segment},/bar/{segment}
+            - RemoteAddr=192.168.1.1/24
+          filters:
+            - AddRequestHeader=X-Request-Foo, Bar
+            - AddRequestParameter=foo, bar
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+            - Hystrix=myCommandName
+            - name:Hystrix
+
+---
+server:
+  port: 8081
+spring:
+  profiles: dev2
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: hystrix_route
+          uri: lb://backing-service:8088
+          predicates:
+            - Path=/consumingserviceendpoint
+          filters:
+            - name: Hystrix
+              args:
+                name: fallbackcmd
+                fallbackUri: forward:/incaseoffailureusethis
+            - RewritePath=/consumingserviceendpoint, /backingserviceendpoint
+
+
+---
+server:
+  port: 8081
+spring:
+  profiles: dev3
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: ingredients
+            uri: lb://ingredients
+            predicates:
+              - Path=//ingredients/**
+            filters:
+              - name: Hystrix
+                args:
+                  name: fetchIngredients
+                  fallbackUri: forward:/fallback
+        - id: ingredients-fallback
+          uri: http://localhost:9994
+          predicates:
+            - Path=/fallback
+
+
+---
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: prefixpath_route
+          uri: https://example.org
+          filters:
+            - PrefixPath=/mypath
+
+
+---
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: preserve_host_route
+          uri: https://example.org
+          filters:
+            - PreserveHostHeader
+
+
+---
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: requestratelimiter_route
+          uri: https://example.org
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+
+
+---
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: requestratelimiter_route
+          uri: https://example.org
+          filters:
+            - name: RequestRateLimiter
+              args:
+                rate-limiter: "#{@myRateLimiter}"
+                key-resolver: "#{@userKeyResolver}"
+
+
+---
+#RedirectTo GatewayFilter Factory
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: prefixpath_route
+          uri: https://example.org
+          filters:
+            - RedirectTo=302, https://acme.org
+
+
+---
+#Retry GatewayFilter Factory
+# 不支持post put 有body的请求
+# 不能使用ResponseEntity 来返回状态码，需要抛出异常或者使用Mono.error(ex) return value
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: retry_test
+          uri: http://localhost:8080/flakey
+          predicates:
+            - Host=*.retry.com
+          filters:
+            - name: Retry
+              args:
+                retries: 3
+                statuses: BAD_GATEWAY
+
+
+---
