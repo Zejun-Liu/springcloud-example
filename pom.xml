@@ -23,5 +23,6 @@
         <module>hystrix-dashboard</module>
         <module>turbine-dashboard</module>
         <module>eureka-gateway</module>
+        <module>eureka-server-security</module>
     </modules>
 </project>
